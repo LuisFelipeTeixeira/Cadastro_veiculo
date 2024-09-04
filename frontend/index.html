@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Veículos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Veículos</h1>
+    <form id="vehicle-form">
+        <input type="text" id="modelo" placeholder="Modelo" required>
+        <input type="text" id="marca" placeholder="Marca" required>
+        <input type="number" id="ano" placeholder="Ano" required>
+        <input type="text" id="cor" placeholder="Cor" required>
+        <button type="submit">Adicionar Veículo</button>
+    </form>
+
+    <h2>Veículos Cadastrados</h2>
+    <table id="vehicles-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Modelo</th>
+                <th>Marca</th>
+                <th>Ano</th>
+                <th>Cor</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        const apiBaseUrl = 'http://localhost:3001';
+
+        async function fetchVehicles() {
+            const response = await fetch(`${apiBaseUrl}/listar-veiculos`);
+            const vehicles = await response.json();
+            const tableBody = document.querySelector('#vehicles-table tbody');
+            tableBody.innerHTML = '';
+            vehicles.forEach(vehicle => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${vehicle.id}</td>
+                    <td>${vehicle.modelo}</td>
+                    <td>${vehicle.marca}</td>
+                    <td>${vehicle.ano}</td>
+                    <td>${vehicle.cor}</td>
+                    <td>
+                        <button onclick="deleteVehicle(${vehicle.id})">Deletar</button>
+                        <button onclick="getVehicle(${vehicle.id})">Consultar</button>
+                        <button onclick="putVehicle(${vehicle.id})">Atualizar</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function addVehicle(event) {
+            event.preventDefault();
+            const modelo = document.getElementById('modelo').value;
+            const marca = document.getElementById('marca').value;
+            const ano = document.getElementById('ano').value;
+            const cor = document.getElementById('cor').value;
+
+            await fetch(`${apiBaseUrl}/adicionar-veiculo`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ modelo, marca, ano, cor })
+            });
+
+            document.getElementById('vehicle-form').reset();
+            fetchVehicles();
+        }
+
+        async function putVehicle(id) {
+            await fetch(`${apiBaseUrl}/atualizar-veiculo/${id}`, { method: 'put' });
+            fetchVehicles();
+        }
+
+        async function getVehicle(id) {
+            await fetch(`${apiBaseUrl}/consultar-veiculo/${id}`, { method: 'get' });
+            fetchVehicles();
+        }
+
+        async function deleteVehicle(id) {
+            await fetch(`${apiBaseUrl}/deletar-veiculo/${id}`, { method: 'delete' });
+            fetchVehicles();
+        }
+
+        document.getElementById('vehicle-form').addEventListener('submit', addVehicle);
+
+        fetchVehicles();
+    </script>
+</body>
+</html>
