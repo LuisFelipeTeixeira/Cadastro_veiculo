@@ -1,0 +1,68 @@
+
+.divisao-cadastro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+.divisao-cadastro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url(../../img/wallpaper.avif);
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.subdivisao-informacoes-cadastro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.forms-cadastro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+    height: 100%;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 1rem;
+    gap: 10px;
+}
+
+.input-container{
+    width: 65%;
+    padding: 0.6rem;
+    border-radius: 50px;
+    border: 2px solid rgba(104, 104, 104, 0.5);
+}
+
+.fas {
+    color: rgba(27, 95, 172, 0.8);
+}
+
+.input-cadastro {
+border: 0;
+outline: none;
+}
+
+.botao-cadastro {
+    width: 70%;
+    border-radius: 50px;
+    padding: 0.7rem 1rem 0.7rem 1rem;
+    margin-top: 1.3rem;
+    background: linear-gradient(90deg, #004080, #66ccff);
+    border:0;
+    color: #fff;
+    cursor: pointer;
+}
+
