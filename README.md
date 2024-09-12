@@ -108,13 +108,13 @@ DELIMITER ;
 ```
 
 #5. Abra o frontend:
-   No Visual Studio Code, clique com o botão direito no arquivo index.html e selecione "Open with Live Server".
-   O Live Server abrirá seu navegador com o frontend da aplicação.
+   - No Visual Studio Code, clique com o botão direito no arquivo index.html e selecione "Open with Live Server".
+   - O Live Server abrirá seu navegador com o frontend da aplicação.
 
    
    ##Rotas da API:
-   GET /veiculos: Retorna todos os veículos cadastrados. (em desenvolvimento)
-   POST /veiculos: Cadastra um novo veículo.
-   PUT /veiculos/:id: Atualiza as informações de um veículo. (em desenvolvimento)
-   DELETE /veiculos/:id: Remove um veículo do sistema. (em desenvolvimento)
+   - GET /veiculos: Retorna todos os veículos cadastrados. (em desenvolvimento).
+   - POST /veiculos: Cadastra um novo veículo.
+   - PUT /veiculos/:id: Atualiza as informações de um veículo. (em desenvolvimento).
+   - DELETE /veiculos/:id: Remove um veículo do sistema. (em desenvolvimento).
 
