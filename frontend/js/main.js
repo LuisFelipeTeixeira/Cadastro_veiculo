@@ -38,7 +38,34 @@ async function addVehicle(event) {
 
     document.getElementById('vehicle-form').reset();
     fetchVehicles();
+
+    // Armazenar mensagem de sucesso no sessionStorage
+    sessionStorage.setItem('showSuccessMessage', 'true');
+
+    // Atualizar a página para mostrar a mensagem
+    window.location.reload();
 }
+
+function displaySuccessMessage() {
+    const showMessage = sessionStorage.getItem('showSuccessMessage');
+    
+    if (showMessage === 'true') {
+        const notificationContainer = document.getElementById('notification-container');
+        const notificationMessage = document.getElementById('notification-message');
+        notificationMessage.textContent = 'Veículo adicionado com sucesso!';
+        notificationContainer.style.display = 'block';
+
+        // Remover a flag do sessionStorage após exibição
+        sessionStorage.removeItem('showSuccessMessage');
+    }
+}
+
+function closeNotification() {
+    const notificationContainer = document.getElementById('notification-container');
+    notificationContainer.style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', displaySuccessMessage);
 
 async function putVehicle(id) {
     await fetch(`${apiBaseUrl}/atualizar-veiculo/${id}`, { method: 'put' });
