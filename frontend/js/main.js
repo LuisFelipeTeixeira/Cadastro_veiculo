@@ -1,27 +1,37 @@
 const apiBaseUrl = 'http://localhost:3001';
 
+
 async function fetchVehicles() {
-    const response = await fetch(`${apiBaseUrl}/listar-veiculos`);
-    const vehicles = await response.json();
-    const tableBody = document.querySelector('#vehicles-table tbody');
-    tableBody.innerHTML = '';
-    vehicles.forEach(vehicle => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${vehicle.id}</td>
-            <td>${vehicle.modelo}</td>
-            <td>${vehicle.marca}</td>
-            <td>${vehicle.ano}</td>
-            <td>${vehicle.cor}</td>
-            <td>
-                <button onclick="deleteVehicle(${vehicle.id})">Deletar</button>
-                <button onclick="getVehicle(${vehicle.id})">Consultar</button>
-                <button onclick="putVehicle(${vehicle.id})">Atualizar</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
+    try {
+        const response = await fetch(`${apiBaseUrl}/listar-veiculos`);
+        if (!response.ok) throw new Error('Erro ao buscar veículos');
+        const vehicles = await response.json();
+        const tableBody = document.querySelector('#vehicles-table tbody');
+        tableBody.innerHTML = '';
+        vehicles.forEach(vehicle => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${vehicle.id}</td>
+                <td>${vehicle.modelo}</td>
+                <td>${vehicle.marca}</td>
+                <td>${vehicle.ano}</td>
+                <td>${vehicle.cor}</td>
+                <td>
+                    <button onclick="deleteVehicle(${vehicle.id})">Deletar</button>
+                    
+                    <button onclick="openUpdateModal(${vehicle.id})">Atualizar</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar veículos:', error);
+    }
 }
+
+// <button onclick="getVehicle(${vehicle.id})">Consultar</button>
+
+
 
 async function addVehicle(event) {
     event.preventDefault();
@@ -30,21 +40,89 @@ async function addVehicle(event) {
     const ano = document.getElementById('ano').value;
     const cor = document.getElementById('cor').value;
 
-    await fetch(`${apiBaseUrl}/adicionar-veiculo`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ modelo, marca, ano, cor })
-    });
+    try {
+        const response = await fetch(`${apiBaseUrl}/adicionar-veiculo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ modelo, marca, ano, cor })
+        });
 
-    document.getElementById('vehicle-form').reset();
-    fetchVehicles();
+        if (!response.ok) throw new Error('Erro ao adicionar veículo');
 
-    // Armazenar mensagem de sucesso no sessionStorage
-    sessionStorage.setItem('showSuccessMessage', 'true');
+        document.getElementById('vehicle-form').reset();
+        fetchVehicles();
 
-    // Atualizar a página para mostrar a mensagem
-    window.location.reload();
+        sessionStorage.setItem('showSuccessMessage', 'true');
+        window.location.reload();
+    } catch (error) {
+        console.error('Erro ao adicionar veículo:', error);
+    }
 }
+
+async function openUpdateModal(id) {
+    try {
+        const response = await fetch(`${apiBaseUrl}/consultar-veiculo/${id}`);
+        if (!response.ok) throw new Error('Erro ao consultar veículo');
+        const vehicle = await response.json();
+
+        document.getElementById('update-id').value = vehicle.id;
+        document.getElementById('update-modelo').value = vehicle.modelo;
+        document.getElementById('update-marca').value = vehicle.marca;
+        document.getElementById('update-ano').value = vehicle.ano;
+        document.getElementById('update-cor').value = vehicle.cor;
+
+        document.getElementById('update-modal').style.display = 'block';
+    } catch (error) {
+        console.error('Erro ao abrir modal de atualização:', error);
+    }
+}
+
+function closeUpdateModal() {
+    document.getElementById('update-modal').style.display = 'none';
+}
+
+
+async function putVehicle(id) {
+    const modelo = document.getElementById('update-modelo').value;
+    const marca = document.getElementById('update-marca').value;
+    const ano = document.getElementById('update-ano').value;
+    const cor = document.getElementById('update-cor').value;
+
+    try {
+        const response = await fetch(`${apiBaseUrl}/atualizar-veiculo/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ modelo, marca, ano, cor })
+        });
+
+        if (!response.ok) throw new Error('Erro ao atualizar veículo');
+
+        fetchVehicles();
+        closeUpdateModal();
+    } catch (error) {
+        console.error('Erro ao atualizar veículo:', error);
+    }
+}
+
+async function getVehicle(id) {
+    try {
+        await fetch(`${apiBaseUrl}/consultar-veiculo/${id}`, { method: 'GET' });
+        fetchVehicles();
+    } catch (error) {
+        console.error('Erro ao consultar veículo:', error);
+    }
+}
+
+async function deleteVehicle(id) {
+    try {
+        const response = await fetch(`${apiBaseUrl}/deletar-veiculo/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Erro ao deletar veículo');
+        fetchVehicles();
+    } catch (error) {
+        console.error('Erro ao deletar veículo:', error);
+    }
+}
+
 
 function displaySuccessMessage() {
     const showMessage = sessionStorage.getItem('showSuccessMessage');
@@ -55,7 +133,6 @@ function displaySuccessMessage() {
         notificationMessage.textContent = 'Veículo adicionado com sucesso!';
         notificationContainer.style.display = 'block';
 
-        // Remover a flag do sessionStorage após exibição
         sessionStorage.removeItem('showSuccessMessage');
     }
 }
@@ -66,22 +143,5 @@ function closeNotification() {
 }
 
 document.addEventListener('DOMContentLoaded', displaySuccessMessage);
-
-async function putVehicle(id) {
-    await fetch(`${apiBaseUrl}/atualizar-veiculo/${id}`, { method: 'put' });
-    fetchVehicles();
-}
-
-async function getVehicle(id) {
-    await fetch(`${apiBaseUrl}/consultar-veiculo/${id}`, { method: 'get' });
-    fetchVehicles();
-}
-
-async function deleteVehicle(id) {
-    await fetch(`${apiBaseUrl}/deletar-veiculo/${id}`, { method: 'delete' });
-    fetchVehicles();
-}
-
 document.getElementById('vehicle-form').addEventListener('submit', addVehicle);
-
 fetchVehicles();

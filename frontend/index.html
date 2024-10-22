@@ -22,14 +22,14 @@
                 <p class="subdivisao-titulo">Cadastre o seu veículo</p>
 
                 <div class="input-container">
-                    <i class="fas fa-car"></i>
-                    <input type="text" id="modelo" placeholder="Modelo" required class="input-cadastro"
->
+                    <i class="fas fa-industry"></i>
+                    <input type="text" id="marca" placeholder="Marca" required class="input-cadastro">
                 </div>
 
                 <div class="input-container">
-                    <i class="fas fa-industry"></i>
-                    <input type="text" id="marca" placeholder="Marca" required class="input-cadastro">
+                    <i class="fas fa-car"></i>
+                    <input type="text" id="modelo" placeholder="Modelo" required class="input-cadastro"
+>
                 </div>
 
                 <div class="input-container">
@@ -64,6 +64,36 @@
             </tbody>
         </table>
     </div>
+
+    
+    <div id="update-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal-btn" class="close" onclick="closeUpdateModal()">&times;</span>
+            <h2>Atualizar Veículo</h2>
+            <form id="update-form">
+                <input type="hidden" id="update-id">
+                <div>
+                    <label for="update-modelo">Modelo:</label>
+                    <input type="text" id="update-modelo" required>
+                </div>
+                <div>
+                    <label for="update-marca">Marca:</label>
+                    <input type="text" id="update-marca" required>
+                </div>
+                <div>
+                    <label for="update-ano">Ano:</label>
+                    <input type="number" id="update-ano" required>
+                </div>
+                <div>
+                    <label for="update-cor">Cor:</label>
+                    <input type="text" id="update-cor" required>
+                </div>
+                <button type="button" onclick="putVehicle(document.getElementById('update-id').value)">Atualizar</button>
+            </form>
+        </div>
+    </div>
+    
+    
 
     <script src="js/main.js"></script>
 </body>

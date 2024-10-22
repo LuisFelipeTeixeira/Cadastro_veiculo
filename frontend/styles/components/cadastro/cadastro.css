@@ -62,7 +62,9 @@ outline: none;
     margin-top: 1.3rem;
     background: linear-gradient(90deg, #004080, #66ccff);
     border:0;
-    color: #fff;
+    color: #ffffff;
     cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
 }
 

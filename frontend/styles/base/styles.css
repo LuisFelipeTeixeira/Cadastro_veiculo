@@ -1,5 +1,6 @@
 @import url(../components/cadastro/cadastro.css);
 @import url(../components/cadastrados/cadastrados.css);
+@import url(../components/cadastrados/modal.css);
 :root {
     --header-color: #fff;
 
@@ -52,3 +53,7 @@ th, td {
 .notification-container button:hover {
     background-color: #0c6b0c;
 }
+
+
+
+
