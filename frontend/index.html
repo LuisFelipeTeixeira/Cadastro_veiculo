@@ -12,11 +12,10 @@
 <body>
     <div class="divisao-cadastro">
         <div class="subdivisao-informacoes-cadastro">
-            <div id="notification-container" class="notification-container">
+            <div id="notification-container" class="notification-container" style="display: none;">
                 <p id="notification-message"></p>
                 <button onclick="closeNotification()">Fechar</button>
             </div>
-
 
             <form id="vehicle-form" class="forms-cadastro">
                 <p class="subdivisao-titulo">Cadastre o seu veículo</p>
@@ -46,6 +45,7 @@
             </form>
         </div>
     </div>
+
     <div class="area-cadastrados">
         <h2 class="title-cadastrados">Veículos Cadastrados</h2>
         <table id="vehicles-table">
@@ -64,7 +64,6 @@
         </table>
     </div>
 
-    
     <div id="update-modal" class="modal">
         <div class="modal-content">
             <span id="close-modal-btn" class="close" onclick="closeUpdateModal()">&times;</span>
@@ -87,12 +86,28 @@
                     <label for="update-cor">Cor:</label>
                     <input type="text" id="update-cor" required>
                 </div>
-                <button type="button" onclick="putVehicle(document.getElementById('update-id').value)">Atualizar</button>
+                <button type="button"
+                    onclick="putVehicle(document.getElementById('update-id').value)">Atualizar</button>
             </form>
         </div>
     </div>
-    
-    
+
+    <!-- Modal para Adicionar Imagem -->
+    <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-image-modal-btn" class="close" onclick="closeImageModal()">&times;</span>
+            <h2>Adicionar Imagem</h2>
+            <input type="file" id="image-upload" accept="image/*">
+            <button type="button" onclick="uploadImage()">Adicionar Imagem</button>
+        </div>
+    </div>
+
+    <div class="visualizar-div">
+        <div id="vehicle-details-card" style="display:none;">
+            <div id="vehicle-details"></div>
+            <img id="vehicle-image" style="max-width: 100%; display:none;" alt="Imagem do veículo">
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>
